@@ -19,7 +19,8 @@ import Link from "next/link";
 
 const navLinks = [
   { title: "Home", path: "/" },
-  { title: "Gallery", path: "/gallery" },
+    { title: "Gallery", path: "/gallery" },
+   { title: "Upload", path: "/upload" },
   { title: "About", path: "/about" },
 ];
 
@@ -35,7 +36,7 @@ export default function Navbar() {
       <AppBar position="static" color="primary">
         <Toolbar>
           {/* Logo / Title */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h8" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/" style={{ textDecoration: "none", color: "white" }}>
               Image Gallery
             </Link>
