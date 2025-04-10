@@ -15,7 +15,7 @@ const page = () => {
   };
 
   return (
-    <div>
+    <div className="mt-10 mb-5">
       <UploadForm onImageUpload={handleImageUpload} />{" "}
       <ImageGrid images={images} handleDelete={handleDelete} />
     </div>

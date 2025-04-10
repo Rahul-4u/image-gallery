@@ -19,8 +19,8 @@ import Link from "next/link";
 
 const navLinks = [
   { title: "Home", path: "/" },
-    { title: "Gallery", path: "/gallery" },
-   { title: "Upload", path: "/upload" },
+  { title: "Gallery", path: "/gallery" },
+  { title: "Upload", path: "/upload" },
   { title: "About", path: "/about" },
 ];
 
@@ -33,37 +33,47 @@ export default function Navbar() {
 
   return (
     <>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          {/* Logo / Title */}
-          <Typography variant="h8" component="div" sx={{ flexGrow: 1 }}>
-            <Link href="/" style={{ textDecoration: "none", color: "white" }}>
-              Image Gallery
-            </Link>
-          </Typography>
+      {/* Sticky Navbar */}
+      <Box
+        // className=" sticky top-0 z-50"
+        sx={{ bgcolor: "info.main" }}
+      >
+        <AppBar
+          position="static"
+          sx={{ bgcolor: "info.main", boxShadow: "none", border:'none' }}
+          className="max-w-[1440px] mx-auto bg-sky-700 shadow-none"
+        >
+          <Toolbar>
+            {/* Logo / Title */}
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link href="/" style={{ textDecoration: "none", color: "white" }}>
+                Image Gallery
+              </Link>
+            </Typography>
 
-          {/* Desktop Nav Links */}
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navLinks.map((link) => (
-              <Button
-                key={link.title}
-                color="inherit"
-                component={Link}
-                href={link.path}
-              >
-                {link.title}
-              </Button>
-            ))}
-          </Box>
+            {/* Desktop Nav Links */}
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              {navLinks.map((link) => (
+                <Button
+                  key={link.title}
+                  color="inherit"
+                  component={Link}
+                  href={link.path}
+                >
+                  {link.title}
+                </Button>
+              ))}
+            </Box>
 
-          {/* Mobile Menu Icon */}
-          <Box sx={{ display: { xs: "block", sm: "none" } }}>
-            <IconButton color="inherit" onClick={toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+            {/* Mobile Menu Icon */}
+            <Box sx={{ display: { xs: "block", sm: "none" } }}>
+              <IconButton color="inherit" onClick={toggleDrawer(true)}>
+                <MenuIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </Box>
 
       {/* Drawer for Mobile */}
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>

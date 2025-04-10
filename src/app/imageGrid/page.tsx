@@ -34,7 +34,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, handleDelete }) => {
      };
 
   return (
-    <div>
+    <div   className="max-w-7xl mx-auto">
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
