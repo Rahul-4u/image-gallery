@@ -1,3 +1,4 @@
+// UploadForm.tsx
 "use client";
 import React, { useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   Stack,
   Input,
 } from "@mui/material";
+import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
 
 type ImageData = {
   id: string;
@@ -16,28 +18,47 @@ type ImageData = {
 };
 
 interface UploadFormProps {
-  onImageUpload: (newImages: ImageData[]) => void; 
+  onImageUpload: (newImages: ImageData[]) => void;
 }
 
 const UploadForm: React.FC<UploadFormProps> = ({ onImageUpload }) => {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
   const [files, setFiles] = useState<FileList | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!files || files.length === 0) {
       alert("Please select at least one image");
       return;
     }
 
-    const newImages: ImageData[] = Array.from(files).map((file, index) => ({
-      id: `${Date.now() + index}`,
-      url: URL.createObjectURL(file),
-      title: title || `Image ${index + 1}`,
-    }));
+    setLoading(true);
 
-    onImageUpload(newImages);
+    try {
+      const uploadedImages: ImageData[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const url = await uploadToCloudinary(file);
+        uploadedImages.push({
+          id: `${Date.now() + i}`,
+          url,
+          title: title || `Image ${i + 1}`,
+        });
+      }
+
+      onImageUpload(uploadedImages);
+      setTitle("");
+      setTags("");
+      setFiles(null);
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Upload failed");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -80,8 +101,13 @@ const UploadForm: React.FC<UploadFormProps> = ({ onImageUpload }) => {
           onChange={(e) => setFiles(e.target.files)}
         />
 
-        <Button type="submit" variant="contained" color="primary">
-          Upload
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading}
+        >
+          {loading ? "Uploading..." : "Upload"}
         </Button>
       </Stack>
     </Box>
