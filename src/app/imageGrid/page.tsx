@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Grid, Card, CardMedia, IconButton, Dialog, DialogContent, Typography } from "@mui/material";
+import { Grid, Card, CardMedia, IconButton, Dialog, DialogContent, Typography, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 
@@ -14,12 +14,26 @@ interface ImageGridProps {
   images: ImageData[];
 }
 
+
+
  // Handle Open - To show the clicked image in a dialog
  
 const ImageGrid: React.FC<ImageGridProps> = ({ images, handleDelete }) => {
     const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
+
+  //  filter system add fun
+   const filteredImages = images.filter((img) => {
+     const titleMatch = img.title
+       ?.toLowerCase()
+       .includes(searchQuery.toLowerCase());
+     const tagMatch = img.tags?.some((tag) =>
+       tag.toLowerCase().includes(searchQuery.toLowerCase())
+     );
+     return titleMatch || tagMatch;
+   });
     
     
      const handleOpen = (image: ImageData) => {
@@ -34,13 +48,21 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, handleDelete }) => {
      };
 
   return (
-    <div   className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto">
+      <TextField
+        label="Search by title or tag"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {images.map((img) => (
+        {filteredImages.map((img) => (
           <Grid size={{ xs: 2, sm: 4, md: 4 }} key={img.id}>
             <Card sx={{ position: "relative" }}>
               <CardMedia
